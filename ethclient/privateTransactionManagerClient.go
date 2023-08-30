@@ -21,14 +21,17 @@ type privateTransactionManagerDefaultClient struct {
 }
 
 // Create a new client to interact with private transaction manager via a HTTP endpoint
-func newPrivateTransactionManagerClient(endpoint string) (privateTransactionManagerClient, error) {
+func newPrivateTransactionManagerClient(endpoint string, httpClient *http.Client) (privateTransactionManagerClient, error) {
 	_, err := url.Parse(endpoint)
 	if err != nil {
 		return nil, err
 	}
+	if httpClient == nil {
+		httpClient = &http.Client{}
+	}
 	return &privateTransactionManagerDefaultClient{
 		rawurl:     endpoint,
-		httpClient: &http.Client{},
+		httpClient: httpClient,
 	}, nil
 }
 

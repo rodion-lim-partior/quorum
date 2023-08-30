@@ -23,6 +23,7 @@ import (
 	"errors"
 	"fmt"
 	"math/big"
+	"net/http"
 
 	"github.com/ethereum/go-ethereum"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
@@ -66,7 +67,17 @@ func NewClientWithPTM(c *rpc.Client, ptm privateTransactionManagerClient) *Clien
 // provides support for private transactions
 func (ec *Client) WithPrivateTransactionManager(rawurl string) (*Client, error) {
 	var err error
-	ec.pc, err = newPrivateTransactionManagerClient(rawurl)
+	ec.pc, err = newPrivateTransactionManagerClient(rawurl, nil)
+	if err != nil {
+		return nil, err
+	}
+	return ec, nil
+}
+
+// provides support for private transactions and custom http client
+func (ec *Client) WithPrivateTransactionManagerCustomClient(rawurl string, httpClient *http.Client) (*Client, error) {
+	var err error
+	ec.pc, err = newPrivateTransactionManagerClient(rawurl, httpClient)
 	if err != nil {
 		return nil, err
 	}
