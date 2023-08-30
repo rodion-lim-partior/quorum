@@ -21,7 +21,7 @@ func TestPrivateTransactionManagerClient_storeRaw(t *testing.T) {
 	expectedDataEPH := common.BytesToEncryptedPayloadHash(expectedData)
 	arbitraryServer := newStoreRawServer()
 	defer arbitraryServer.Close()
-	testObject, err := newPrivateTransactionManagerClient(arbitraryServer.URL)
+	testObject, err := newPrivateTransactionManagerClient(arbitraryServer.URL, nil)
 	assert.NoError(t, err)
 
 	key, err := testObject.StoreRaw([]byte("arbitrary payload"), "arbitrary private from")
